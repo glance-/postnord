@@ -188,7 +188,34 @@ class PostnordSensor(RestoreEntity):
                 self._attributes["from"] = shipment.get("consignor", {}).get("name", STATE_UNKNOWN)
                 self._attributes["status"] = shipment.get("statusText", {}).get("header", STATE_UNKNOWN)
                 self._attributes["type"] = shipment.get("service", {}).get("name", STATE_UNKNOWN)
+                self._attributes["estimatedTimeOfArrival"] = shipment.get("estimatedTimeOfArrival", STATE_UNKNOWN)
 
+                # Flag where it is, if known
+                if 'deliveryPoint' in shipment:
+                    if 'coordinate' in shipment['deliveryPoint']:
+                        if len(shipment['deliveryPoint']['coordinate']) > 0:
+                            self._attributes['latitude'] = shipment['deliveryPoint']['coordinate'][0]['northing']
+                            self._attributes['longitude'] = shipment['deliveryPoint']['coordinate'][0]['easting']
+
+                # find it under items
+                for item in shipment.get("items", []):
+                    if item.get("itemId", "") != self._package_id:
+                        continue
+                    for attr in ["dropOffDate", "returnDate"]:
+                        if attr in item:
+                            self._attributes[attr] = item[attr]
+
+                    try:
+                        for event in item.get("events", []):
+                            # find the last event and publish that status
+                            # Ignoring INFORMED events and such
+                            if event["status"] not in ["EN_ROUTE",
+                                    "AVAILABLE_FOR_DELIVERY"]:
+                                continue
+                            self._attributes["location"] = event["location"]["displayName"]
+                            self._attributes["locationType"] = event["location"]["locationType"]
+                    except:
+                        pass
             else:
                 _LOGGER.info("Found other shipmentId {}".format(shipment["shipmentId"]))
 
