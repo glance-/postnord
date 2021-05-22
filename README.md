@@ -32,5 +32,9 @@ card to view them all as a list in lovelace:
         type: 'custom:auto-entities'
 ```
 
+If you like this component take a look at its cousin that tracks packages
+from DHL[2].
+
 
 1. https://github.com/thomasloven/lovelace-auto-entities
+2. https://github.com/glance-/dhl
