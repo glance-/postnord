@@ -1,0 +1,6 @@
+{
+  "name": "Postnord",
+  "content_in_root": true,
+  "render_readme": true,
+  "country": ["NO", "SE", "DK"]
+}
