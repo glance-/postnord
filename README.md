@@ -33,8 +33,10 @@ card to view them all as a list in lovelace:
 ```
 
 If you like this component take a look at its cousin that tracks packages
-from DHL[2].
+from DHL[2], bring[3] and DbSchenker[4]
 
 
 1. https://github.com/thomasloven/lovelace-auto-entities
 2. https://github.com/glance-/dhl
+3. https://github.com/glance-/bring
+4. https://github.com/glance-/dbschenker
